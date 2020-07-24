@@ -23,8 +23,7 @@ router
 const app = new Application();
 app.use(async (ctx, next) => {
   await next();
-  const rt = ctx.response.headers.get("X-Response-Time");
-  console.log(`${ctx.request.method} ${ctx.request.url} - ${rt}`);
+  console.log(`${ctx.request.method} ${ctx.request.url}`);
 });
 app.addEventListener('error', (evt) => {
   // Will log the thrown error to the console.
