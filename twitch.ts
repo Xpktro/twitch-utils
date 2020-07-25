@@ -66,18 +66,35 @@ const getUsers = ({ id = [], login = [] }: { id?: string[], login?: string[] }) 
   .then(response => response.data);
 
 const usersFollows = ({ fromId = '', toId = '', from = '', to = '' }) =>
-  Promise.resolve(
-    from || to // FIXME: How about an id and a login?
-      ? getUsers({ login: [from, to] })
-        .then(users => users.map((user: { id: string }) => user.id))
-      : [fromId, toId]
-  )
-  .then(([from_id, to_id]: any) =>
+  getUsers({
+    id: [fromId, toId].filter(id => id !== ''),
+    login: [from, to].filter(id => id !== '')
+  })
+  .then(users => ({
+    from_id: fromId
+      || users
+          .filter((user: { display_name: string }) => user.display_name.toLowerCase() === from)
+          .map((user: { id: string }) => user.id)[0] || '',
+    to_id: toId
+      || users
+          .filter((user: { display_name: string }) => user.display_name.toLowerCase() === to)
+          .map((user: { id: string }) => user.id)[0] || '',
+  }))
+  .then(({ from_id, to_id }) =>
     request(`users/follows?${new URLSearchParams({ from_id, to_id })}`)
   )
   .then(response => response.data);
 
+const getChatters = (channel: string) =>
+  fetch(`https://tmi.twitch.tv/group/user/${channel}/chatters`)
+    .then(response => response.json())
+    .then(data => data.chatters.viewers);
+
 export const users = {
   get: getUsers,
   follows: usersFollows
+};
+
+export const channel = {
+  chatters: getChatters
 };

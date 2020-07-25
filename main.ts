@@ -3,12 +3,12 @@ config({ export: true });
 
 import { Application, Router } from './deps.ts';
 import i18n from './i18n.ts';
-import { users } from './twitch.ts';
+import { users, channel } from './twitch.ts';
 import { dateDiff } from './utils.ts';
 
 const router = new Router();
 router
-  .get('/follows/:from/:to', i18n, async ({ response, params: { from, to }, state: { lang } }) =>
+  .get('/follows/:from/:to', i18n, ({ response, params: { from, to }, state: { lang } }) =>
     users.follows({ from, to })
       .then(followages =>
         (!followages || followages.length < 1)
@@ -18,6 +18,11 @@ router
       .then(body => {
         response.body = body;
       })
+  )
+  .get('/channels/:channelId/chatters/random', ({ response, params: { channelId }}) =>
+    channel.chatters(channelId!)
+      .then(chatters => chatters[Math.floor(Math.random() * chatters.length)])
+      .then(chatter => response.body = chatter)
   );
 
 const app = new Application();
