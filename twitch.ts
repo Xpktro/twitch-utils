@@ -45,7 +45,7 @@ const request = (endpoint: string, params = {}) =>
     }).then(r => r.json())
   )
 
-const getUsers = ({
+export const getUsers = ({
   id = [],
   login = [],
 }: {
