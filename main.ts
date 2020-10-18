@@ -4,6 +4,7 @@ config({ export: true })
 import { Application, Router, parseJSON } from './deps.ts'
 import i18n from './i18n.ts'
 import { users, channel } from './twitch.ts'
+import { getChannelEmotes } from './bttv.ts'
 
 const router = new Router()
 router
@@ -40,6 +41,11 @@ router
             : ''
         )
         .then(chatter => (response.body = chatter))
+  )
+  .get('/channels/:channel/emotes', ({ response, params: { channel } }) =>
+    getChannelEmotes(channel!)
+      .then(emotes => emotes.map((emote: { code: string }) => emote.code))
+      .then(emotes => (response.body = emotes.join(' ')))
   )
 
 const app = new Application()
