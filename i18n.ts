@@ -1,4 +1,4 @@
-import { RouterMiddleware } from './deps.ts';
+import { RouterMiddleware } from './deps.ts'
 
 const strings: Record<string, Record<string, (vars?: any) => string>> = {
   en: {
@@ -11,10 +11,19 @@ const strings: Record<string, Record<string, (vars?: any) => string>> = {
         [hours, 'hours'],
         [minutes, 'minutes'],
         [seconds, 'seconds'],
-      ].filter((item) => item[0] > 0);
-      return `${from} follows the channel ` + (units.length > 1
-        ? units.slice(0, units.length - 1).map(([unit, name]) => `${unit} ${name}`).join(', ') + ` and ${units[units.length - 1][0]} ${units[units.length - 1][1]} ago`
-        : `${units[0][0]} ${units[0][1]} ago`);
+      ].filter(item => item[0] > 0)
+      return (
+        `${from} follows the channel ` +
+        (units.length > 1
+          ? units
+              .slice(0, units.length - 1)
+              .map(([unit, name]) => `${unit} ${name}`)
+              .join(', ') +
+            ` and ${units[units.length - 1][0]} ${
+              units[units.length - 1][1]
+            } ago`
+          : `${units[0][0]} ${units[0][1]} ago`)
+      )
     },
   },
 
@@ -28,17 +37,25 @@ const strings: Record<string, Record<string, (vars?: any) => string>> = {
         [hours, 'horas'],
         [minutes, 'minutos'],
         [seconds, 'segundos'],
-      ].filter((item) => item[0] > 0);
-      return `${from} sigue al canal hace ` + (units.length > 1
-        ? units.slice(0, units.length - 1).map(([unit, name]) => `${unit} ${name}`).join(', ') + ` y ${units[units.length - 1][0]} ${units[units.length - 1][1]}`
-        : `${units[0][0]} ${units[0][1]}`);
+      ].filter(item => item[0] > 0)
+      return (
+        `${from} sigue al canal hace ` +
+        (units.length > 1
+          ? units
+              .slice(0, units.length - 1)
+              .map(([unit, name]) => `${unit} ${name}`)
+              .join(', ') +
+            ` y ${units[units.length - 1][0]} ${units[units.length - 1][1]}`
+          : `${units[0][0]} ${units[0][1]}`)
+      )
     },
   },
-};
+}
 
 const i18n: RouterMiddleware = (context, next) => {
-  context.state.lang = strings[context.request.url.searchParams.get('lang') || 'es'];
-  return next();
-};
+  context.state.lang =
+    strings[context.request.url.searchParams.get('lang') || 'es']
+  return next()
+}
 
-export default i18n;
+export default i18n
