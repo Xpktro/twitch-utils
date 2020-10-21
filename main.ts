@@ -5,6 +5,7 @@ import { Application, Router, parseJSON } from './deps.ts'
 import i18n from './i18n.ts'
 import { users, channel } from './twitch.ts'
 import { getChannelEmotes } from './bttv.ts'
+import { paginateWords } from './utils.ts'
 
 const router = new Router()
 router
@@ -42,10 +43,28 @@ router
         )
         .then(chatter => (response.body = chatter))
   )
-  .get('/channels/:channel/emotes', ({ response, params: { channel } }) =>
-    getChannelEmotes(channel!)
-      .then(emotes => emotes.map((emote: { code: string }) => emote.code))
-      .then(emotes => (response.body = emotes.join(' ')))
+  .get(
+    '/channels/:channel/emotes',
+    ({
+      response,
+      params: { channel },
+      request: {
+        url: { searchParams },
+      },
+    }) =>
+      getChannelEmotes(channel!)
+        .then(emotes => emotes.map((emote: { code: string }) => emote.code))
+        .then(
+          paginateWords(
+            parseInt(searchParams.get('page') || '1'),
+            parseInt(searchParams.get('size') || '500')
+          )
+        )
+        .then(({ pages, page, size }) => {
+          response.headers.set('X-Pages', `${pages}`)
+          response.headers.set('X-Page-Size', `${size}`)
+          response.body = page.join(' ')
+        })
   )
 
 const app = new Application()
