@@ -4,7 +4,7 @@ A collection of Twitch related utilites for using them with your favorite bot. W
 
 ## Install
 
-You require [Deno](https://deno.land/) (as of now using 1.2.0).
+You require [Deno](https://deno.land/) (as of now using 1.4.6).
 You also need to get a [Twitch App ID and Secret](https://dev.twitch.tv/console/apps) (put them in `.env`)
 
 ## Usage
