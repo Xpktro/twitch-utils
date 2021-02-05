@@ -71,7 +71,7 @@ const usersFollows = ({ fromId = '', toId = '', from = '', to = '' }) =>
         users
           .filter(
             (user: { display_name: string }) =>
-              user.display_name.toLowerCase() === from
+              user.display_name.toLowerCase() === from.toLowerCase()
           )
           .map((user: { id: string }) => user.id)[0] ||
         '',
@@ -80,7 +80,7 @@ const usersFollows = ({ fromId = '', toId = '', from = '', to = '' }) =>
         users
           .filter(
             (user: { display_name: string }) =>
-              user.display_name.toLowerCase() === to
+              user.display_name.toLowerCase() === to.toLowerCase()
           )
           .map((user: { id: string }) => user.id)[0] ||
         '',

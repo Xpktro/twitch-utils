@@ -3,8 +3,11 @@ export { config } from 'https://deno.land/x/dotenv/mod.ts'
 export {
   Application,
   Router,
+} from 'https://deno.land/x/oak/mod.ts'
+
+export type {
   RouterContext,
-  RouterMiddleware,
+  RouterMiddleware
 } from 'https://deno.land/x/oak/mod.ts'
 
 export {
